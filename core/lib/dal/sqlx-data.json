@@ -4389,6 +4389,20 @@
     },
     "query": "\n                UPDATE scheduler_dependency_tracker_fri\n                SET status='queuing'\n                WHERE l1_batch_number IN\n                      (SELECT l1_batch_number FROM scheduler_dependency_tracker_fri\n                       WHERE status != 'queued'\n                         AND circuit_1_final_prover_job_id IS NOT NULL\n                         AND circuit_2_final_prover_job_id IS NOT NULL\n                         AND circuit_3_final_prover_job_id IS NOT NULL\n                         AND circuit_4_final_prover_job_id IS NOT NULL\n                         AND circuit_5_final_prover_job_id IS NOT NULL\n                         AND circuit_6_final_prover_job_id IS NOT NULL\n                         AND circuit_7_final_prover_job_id IS NOT NULL\n                         AND circuit_8_final_prover_job_id IS NOT NULL\n                         AND circuit_9_final_prover_job_id IS NOT NULL\n                         AND circuit_10_final_prover_job_id IS NOT NULL\n                         AND circuit_11_final_prover_job_id IS NOT NULL\n                         AND circuit_12_final_prover_job_id IS NOT NULL\n                         AND circuit_13_final_prover_job_id IS NOT NULL\n                       )\n                RETURNING l1_batch_number;\n            "
   },
+  "530603ddb0d22d1bee4d74106a50adfb8a98fbaabc5beda463d67fe7297dd631": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Int8",
+          "Bool",
+          "Int4"
+        ]
+      }
+    },
+    "query": "\n            INSERT INTO applied_snapshot_status(l1_batch_number, is_finished, last_finished_chunk_id)\n            VALUES ($1, $2, $3)\n            ON CONFLICT\n                (l1_batch_number)\n                DO UPDATE\n                SET l1_batch_number        = excluded.l1_batch_number,\n                    is_finished            = excluded.is_finished,\n                    last_finished_chunk_id = excluded.last_finished_chunk_id\n            "
+  },
   "5490012051be6faaaa11fad0f196eb53160a9c5c045fe9d66afcef7f33403fe2": {
     "describe": {
       "columns": [
@@ -5653,6 +5667,36 @@
       }
     },
     "query": "INSERT INTO compiler_versions (version, compiler, created_at, updated_at) SELECT u.version, $2, now(), now() FROM UNNEST($1::text[]) AS u(version) ON CONFLICT (version, compiler) DO NOTHING"
+  },
+  "700b0511437995b86c095fb2c23d62bcef67529ea16283431556298cef4aa299": {
+    "describe": {
+      "columns": [
+        {
+          "name": "l1_batch_number",
+          "ordinal": 0,
+          "type_info": "Int8"
+        },
+        {
+          "name": "is_finished",
+          "ordinal": 1,
+          "type_info": "Bool"
+        },
+        {
+          "name": "last_finished_chunk_id",
+          "ordinal": 2,
+          "type_info": "Int4"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        true
+      ],
+      "parameters": {
+        "Left": []
+      }
+    },
+    "query": "SELECT l1_batch_number, is_finished, last_finished_chunk_id FROM applied_snapshot_status"
   },
   "715aba794d60ce2faf937eacd9498b203dbb8e620d6d8850b9071cd72902ffbf": {
     "describe": {

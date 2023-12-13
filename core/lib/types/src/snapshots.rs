@@ -71,3 +71,10 @@ pub struct SnapshotFactoryDependencies {
 pub struct SnapshotFactoryDependency {
     pub bytecode: Vec<u8>,
 }
+
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
+pub struct AppliedSnapshotStatus {
+    pub l1_batch_number: L1BatchNumber,
+    pub is_finished: bool,
+    pub last_finished_chunk_id: Option<u64>,
+}
